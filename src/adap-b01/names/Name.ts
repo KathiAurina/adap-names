@@ -20,8 +20,8 @@ export class Name {
 
     /** Expects that all Name components are properly masked */
     constructor(other: string[], delimiter?: string) {
-        this.delimiter = delimiter ? delimiter : DEFAULT_DELIMITER;
-        this.components = other.slice();
+        this.delimiter = delimiter ?? DEFAULT_DELIMITER;
+        this.components = other.map(c => this.unescape(c, this.delimiter));
     }
 
     /**
@@ -39,16 +39,22 @@ export class Name {
      * The special characters in the data string are the default characters
      */
     public asDataString(): string {
-        return this.components.join(this.delimiter);
+        return this.components.map(c => this.escape(c, this.delimiter)).join(this.delimiter);
     }
 
     /** Returns properly masked component string */
     public getComponent(i: number): string {
+        if (i < 0 || i >= this.components.length) {
+            throw new Error("Index out of bounds");
+        }
         return this.components[i];
     }
 
     /** Expects that new Name component c is properly masked */
     public setComponent(i: number, c: string): void {
+        if (i < 0 || i >= this.components.length) {
+            throw new Error("Index out of bounds");
+        }
         this.components[i] = c;
     }
 
@@ -59,6 +65,9 @@ export class Name {
 
     /** Expects that new Name component c is properly masked */
     public insert(i: number, c: string): void {
+        if (i < 0 || i >= this.components.length) {
+            throw new Error("Index out of bounds");
+        }
         this.components.splice(i, 0, c);
     }
 
@@ -68,7 +77,18 @@ export class Name {
     }
 
     public remove(i: number): void {
+        if (i < 0 || i >= this.components.length) {
+            throw new Error("Index out of bounds");
+        }
         this.components.splice(i, 1);
+    }
+
+    private escape(s: string, delim: string): string {
+        return s.split(delim).join(ESCAPE_CHARACTER + delim);
+    }
+
+    private unescape(s: string, delim: string): string {
+        return s.split(ESCAPE_CHARACTER + delim).join(delim);
     }
 
 }
