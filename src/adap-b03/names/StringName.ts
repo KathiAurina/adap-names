@@ -8,64 +8,84 @@ export class StringName extends AbstractName {
     protected noComponents: number = 0;
 
     constructor(source: string, delimiter?: string) {
-        super();
-        throw new Error("needs implementation or deletion");
-    }
-
-    public clone(): Name {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
+        super(delimiter);
+        this.name = source;
+        this.noComponents = this.splitStringName(this.name).length;
     }
 
     public asDataString(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+        return this.name;
     }
 
     public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        return this.noComponents;
     }
 
     public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+        if (i < 0 || i >= this.noComponents) {
+            throw new Error("Index out of bounds");
+        }
+        return this.unescape(this.splitStringName(this.name)[i], this.delimiter);
     }
 
     public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
-    }
+        if (i < 0 || i >= this.noComponents) {
+            throw new Error("Index out of bounds");
+        }
+        let components = this.splitStringName(this.name);
+        components[i] = this.escape(c, this.delimiter);
+        this.name = components.join(this.delimiter);    }
 
     public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
-    }
+        if (i < 0 || i >= this.noComponents) {
+            throw new Error("Index out of bounds");
+        }
+        let components = this.splitStringName(this.name);
+        components.splice(i, 0, this.escape(c, this.delimiter));
+        this.name = components.join(this.delimiter);
+        this.noComponents++;    }
 
     public append(c: string) {
-        throw new Error("needs implementation or deletion");
-    }
+        let components = this.splitStringName(this.name);
+        components.push(this.escape(c, this.delimiter));
+        this.name = components.join(this.delimiter);
+        this.noComponents++;    }
 
     public remove(i: number) {
-        throw new Error("needs implementation or deletion");
-    }
+        if (i < 0 || i >= this.noComponents) {
+            throw new Error("Index out of bounds");
+        }
+        let components = this.splitStringName(this.name);
+        components.splice(i, 1);
+        this.name = components.join(this.delimiter);
+        this.noComponents--;    }
 
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
+
+    private splitStringName(s: string): string[] {
+        if (s === "") {
+            return [];
+        }
+
+        let components: string[] = [];
+        let currentComponent: string = "";
+
+        for (let i = 0; i < s.length; ) {
+
+            if (s[i] === ESCAPE_CHARACTER && i + 1 < s.length && s[i + 1] === this.delimiter) {
+                currentComponent += s[i];
+                currentComponent += s[i+1];
+                i += 2;
+            } else if (s[i] === this.delimiter) {
+                components.push(currentComponent);
+                currentComponent = "";
+                i++;
+            } else {
+                currentComponent += s[i];
+                i++;
+            }
+        }
+        components.push(currentComponent);
+        return components;
     }
 
 }
