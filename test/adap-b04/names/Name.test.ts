@@ -7,12 +7,6 @@ import { StringArrayName } from "../../../src/adap-b04/names/StringArrayName";
 import { IllegalArgumentException } from "../../../src/adap-b04/common";
 import { InvalidStateException } from "../../../src/adap-b04/common";
 import { MethodFailedException } from "../../../src/adap-b04/common";
-//Todos 
-//als Name class tests wshl
-//checkMasking
-//getHashCode
-//concat
-//isEqual
 
 
 describe("StringArrayName Tests", () => {
