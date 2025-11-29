@@ -13,11 +13,17 @@ export class Directory extends Node {
     }
 
     public addChildNode(cn: Node): void {
+    	if (cn == null) {
+            throw new IllegalArgumentException("Child node must not be null");
+        }
         this.childNodes.add(cn);
     }
 
     public removeChildNode(cn: Node): void {
-        this.childNodes.delete(cn); // Yikes! Should have been called remove
+    	if (!this.childNodes.has(cn)) {
+            throw new IllegalArgumentException("Cannot remove node that is not a child");
+        }
+        this.childNodes.delete(cn); 
     }
 
 }

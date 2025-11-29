@@ -3,7 +3,7 @@ import { Name } from "./Name";
 import { AbstractName } from "./AbstractName";
 
 import { IllegalArgumentException } from "../common/IllegalArgumentException";
-import { MethodFailureException } from "../common/MethodFailureException";
+import { MethodFailedException } from "../common/MethodFailedException";
 import { InvalidStateException } from "../common/InvalidStateException";
 
 
@@ -44,60 +44,64 @@ export class StringName extends AbstractName {
     }
 
     public setComponent(i: number, c: string) {
-		this.checkMaskingOfComponent(c);
+		if (c == null || c == undefined){
+	    	throw new IllegalArgumentException("Component must not be null or undefined");
+	    }
+		this.checkMaskingOfOneComponent(c);
         if (i < 0 || i >= this.noComponents) {
             throw new IllegalArgumentException("Index out of bounds");
         }
-        if (c == null || c == undefined){
-        	throw new IllegalArgumentException("Component must not be null or undefined");
-        }
+        
         let comps = this.splitStringName(this.name);
         comps[i] = c;
         this.name = comps.join(this.delimiter);
         let newComp = this.getComponent(i);
         if (newComp == null || newComp == undefined || newComp !== c){
-        	throw new MethodFailureException("setComponent failed");
+        	throw new MethodFailedException("setComponent failed");
         }   
     }
 
     public insert(i: number, c: string) {
-    	this.checkMaskingOfComponent(c);
+		if (c == null || c == undefined){
+        	throw new IllegalArgumentException("Component must not be null or undefined");
+        }
+    	this.checkMaskingOfOneComponent(c);
         if (i < 0 || i >= this.noComponents) {
             throw new IllegalArgumentException("Index out of bounds");
         }
-        if (c == null || c == undefined){
-        	throw new IllegalArgumentException("Component must not be null or undefined");
-        }
+        
         let comps = this.splitStringName(this.name);
         comps.splice(i, 0, this.escape(c, this.delimiter));
         this.name = comps.join(this.delimiter);
         let newComp = this.getComponent(i);
         if (newComp == null || newComp == undefined || newComp !== c){
-        	throw new MethodFailureException("insert failed");
+        	throw new MethodFailedException("insert failed");
         } 
         this.noComponents++;
         if (this.getNoComponents() !== comps.length){
-        	throw new MethodFailureException("insert failed")
+        	throw new MethodFailedException("insert failed")
         }
         this.empty = false;    
     }
 
     public append(c: string) {
-    	this.checkMaskingOfComponent(c);
-    	if (c == null || c == undefined){
+		if (c == null || c == undefined){
     		throw new IllegalArgumentException("Component must not be null or undefined");
     	}
+	
+    	this.checkMaskingOfOneComponent(c);
+    	
         let comps = this.splitStringName(this.name);
-        comps.push(c);
+        comps.push(this.escape(c, this.delimiter));
         this.name = comps.join(this.delimiter);
         this.noComponents++;
         this.empty = false;
         let lastComp = this.getComponent(this.noComponents - 1);
         if (lastComp == null || lastComp == undefined || lastComp !== c){
-        	throw new MethodFailureException("append failed");
+        	throw new MethodFailedException("append failed");
         }
         if (this.noComponents !== comps.length){
-        	throw new MethodFailureException("append failed");
+        	throw new MethodFailedException("append failed");
         }
     }
 
@@ -110,7 +114,7 @@ export class StringName extends AbstractName {
         this.name = comps.join(this.delimiter);
         this.noComponents--;
         if (this.noComponents !== comps.length){
-        	throw new MethodFailureException("remove failed");	
+        	throw new MethodFailedException("remove failed");	
         }
         if (this.noComponents == 0){
         	this.empty = true;
@@ -120,6 +124,10 @@ export class StringName extends AbstractName {
 	public concat(other: Name): void {
 		super.concat(other);
 		this.empty = false;
+	}
+
+	public clone(): Name {
+	    return new StringName(this.name, this.delimiter);
 	}
 
     private splitStringName(s: string): string[] {

@@ -1,7 +1,7 @@
 import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
 import { Name } from "./Name";
 import { IllegalArgumentException } from "../common/IllegalArgumentException";
-import { MethodFailureException } from "../common/MethodFailureException";
+import { MethodFailedException } from "../common/MethodFailedException";
 import { InvalidStateException } from "../common/InvalidStateException";
 
 
@@ -16,9 +16,7 @@ export abstract class AbstractName implements Name {
         this.delimiter = delimiter;
     }
 
-    public clone(): Name {
-        return Object.create(this);
-    }
+    abstract clone(): Name;
 
     public asString(delimiter: string = this.delimiter): string {
     	if (delimiter == null || delimiter.length != 1) {
@@ -107,7 +105,7 @@ export abstract class AbstractName implements Name {
             this.append(other.getComponent(i));
         }
         if(this.getNoComponents() !== concatLength){
-        	throw new MethodFailureException("Concatenation failed");
+        	throw new MethodFailedException("Concatenation failed");
         }
     }
 
@@ -132,9 +130,7 @@ export abstract class AbstractName implements Name {
 			} else {
 				if (s[i] === ESCAPE_CHARACTER){
 					escaped = true;
-				} else if (s[i] === this.delimiter){
-					throw new IllegalArgumentException("wrong masking");
-				}
+				} 
 			}
 		}
 		if (escaped){

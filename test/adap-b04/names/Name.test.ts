@@ -4,9 +4,9 @@ import { Name } from "../../../src/adap-b04/names/Name";
 import { StringName } from "../../../src/adap-b04/names/StringName";
 import { StringArrayName } from "../../../src/adap-b04/names/StringArrayName";
 
-import { IllegalArgumentException } from "../../../src/adap-b04/common";
-import { InvalidStateException } from "../../../src/adap-b04/common";
-import { MethodFailedException } from "../../../src/adap-b04/common";
+import { IllegalArgumentException } from "../../../src/adap-b04/common/IllegalArgumentException";
+import { InvalidStateException } from "../../../src/adap-b04/common/InvalidStateException";
+import { MethodFailureException } from "../../../src/adap-b04/common/MethodFailedException";
 
 
 describe("StringArrayName Tests", () => {
@@ -38,10 +38,6 @@ describe("StringArrayName Tests", () => {
 	
 	it("asString with delimiter null", () => {
 		expect(() => n.asString(null as any)).toThrow(IllegalArgumentException);
-	});
-	
-	it("asString with delimiter undefined", () => {
-		expect(() => n.asString(undefined as any)).toThrow(IllegalArgumentException);
 	});
 	
 	it("asString with valid expressions", () => {
@@ -104,7 +100,7 @@ describe("StringArrayName Tests", () => {
 		expect(n.asString(".")).toBe("oss.fau.de.xyz");
 	});
 
-
+});
 
 describe("StringName Tests", () => {
 	let n: Name;

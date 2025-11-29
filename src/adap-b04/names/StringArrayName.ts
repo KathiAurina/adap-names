@@ -2,7 +2,7 @@ import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
 import { Name } from "./Name";
 import { AbstractName } from "./AbstractName";
 import { IllegalArgumentException } from "../common/IllegalArgumentException";
-import { MethodFailureException } from "../common/MethodFailureException";
+import { MethodFailedException } from "../common/MethodFailedException";
 import { InvalidStateException } from "../common/InvalidStateException";
 
 
@@ -12,7 +12,15 @@ export class StringArrayName extends AbstractName {
 
     constructor(source: string[], delimiter?: string) {
         super(delimiter);
-        this.components = source.map(c => this.unescape(c, this.delimiter));
+        if (source == null || source == undefined) {
+	        throw new IllegalArgumentException("source must not be null or undefined");
+	    }
+        this.components = source.map(c => {
+        	if (c == null || c == undefined) {
+                throw new IllegalArgumentException("Component must not be null or undefined");
+            }
+        	return this.unescape(c, this.delimiter);
+        });
     }
 
     public clone(): Name {
@@ -42,50 +50,53 @@ export class StringArrayName extends AbstractName {
     }
 
     public setComponent(i: number, c: string) {
+		if (c == null || c == undefined){
+        	throw new IllegalArgumentException("Component must not be null or undefined");
+        }
     	this.checkMaskingOfOneComponent(c);
     	c = this.unescape(c, this.delimiter);
     	if (i < 0 || i >= this.components.length) {
             throw new IllegalArgumentException("Index out of bounds");
         }
-        if (c == null || c == undefined){
-        	throw new IllegalArgumentException("Component must not be null or undefined");
-        }
+        
         this.components[i] = c;
         if (this.components[i] == undefined || this.components[i] !== c){
-        	throw new MethodFailureException("setComponent failed");
+        	throw new MethodFailedException("setComponent failed");
         }
     }
 
     public insert(i: number, c: string) {
+		if (c == null || c == undefined){
+        	throw new IllegalArgumentException("Component must not be null or undefined");
+        }
     	this.checkMaskingOfOneComponent(c);
     	c = this.unescape(c, this.delimiter);
     	let length = this.components.length;
         if (i < 0 || i >= length) {
         	throw new IllegalArgumentException("Index out of bounds");
         }
-        if (c == null || c == undefined){
-        	throw new IllegalArgumentException("Component must not be null or undefined");
-        }
+        
         this.components.splice(i, 0, c);
         if (this.components[i] == null || this.components[i] == undefined 
         || this.components[i] !== c || this.getNoComponents() !== length + 1){
-        	throw new MethodFailureException("insert failed");
+        	throw new MethodFailedException("insert failed");
         }
     }
 
     public append(c: string) {
+		if (c == null || c == undefined){
+    		throw new IllegalArgumentException("Component must not be null or undefined");
+    	}
     	this.checkMaskingOfOneComponent(c);
     	c = this.unescape(c, this.delimiter);
     	let length = this.getNoComponents();
-    	if (c == null || c == undefined){
-    		throw new IllegalArgumentException("Component must not be null or undefined");
-    	}
+    	
         this.components.push(c);
         if(this.components[length] == null
         || this.components[length] == undefined
         || this.components[length] !== c
         || this.getNoComponents() !== length + 1){
-        	throw new MethodFailureException("append failed");
+        	throw new MethodFailedException("append failed");
         }
     }
 
@@ -96,8 +107,15 @@ export class StringArrayName extends AbstractName {
         }
         this.components.splice(i, 1);
         if (this.getNoComponents() !== length - 1){
-        	throw new MethodFailureException("remove failed");
+        	throw new MethodFailedException("remove failed");
         }
+    }
+
+    public clone(): Name {
+        const clone = Object.create(StringArrayName.prototype);
+        clone.delimiter = this.delimiter;
+        clone.components = [...this.components]; 
+        return clone;
     }
 
 }

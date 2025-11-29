@@ -8,7 +8,7 @@ export class Node {
 
     constructor(bn: string, pn: Directory) {
         this.doSetBaseName(bn);
-        this.parentNode = pn; // why oh why do I have to set this
+        this.parentNode = pn; 
         this.initialize(pn);
     }
 
@@ -18,6 +18,9 @@ export class Node {
     }
 
     public move(to: Directory): void {
+    	if (to == null){
+    		throw new IllegalArgumentException("Target directory must not be null");
+    	}
         this.parentNode.removeChildNode(this);
         to.addChildNode(this);
         this.parentNode = to;
@@ -34,7 +37,10 @@ export class Node {
     }
 
     protected doGetBaseName(): string {
-        return this.baseName;
+	    if (bn == null || bn === "") {
+	        throw new IllegalArgumentException("Base name must not be empty or null");
+	    }
+	    return this.baseName;
     }
 
     public rename(bn: string): void {
