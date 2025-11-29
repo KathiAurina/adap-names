@@ -85,8 +85,7 @@ export abstract class AbstractName implements Name {
     }
 
     public getDelimiterCharacter(): string {
-        return this.del
-        imiter;
+        return this.delimiter;
     }
 
     abstract getNoComponents(): number;
@@ -107,7 +106,7 @@ export abstract class AbstractName implements Name {
     	for (let i = 0; i < other.getNoComponents(); i++) {
             this.append(other.getComponent(i));
         }
-        if(this.getNoComponents() !== concatLength()){
+        if(this.getNoComponents() !== concatLength){
         	throw new MethodFailureException("Concatenation failed");
         }
     }
@@ -133,7 +132,7 @@ export abstract class AbstractName implements Name {
 			} else {
 				if (s[i] === ESCAPE_CHARACTER){
 					escaped = true;
-				} else if (c[i] === this.delimiter){
+				} else if (s[i] === this.delimiter){
 					throw new IllegalArgumentException("wrong masking");
 				}
 			}

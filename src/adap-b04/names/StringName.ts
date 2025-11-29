@@ -76,7 +76,7 @@ export class StringName extends AbstractName {
         	throw new MethodFailureException("insert failed");
         } 
         this.noComponents++;
-        if (this.getComponent() !== comps.length){
+        if (this.getNoComponent() !== comps.length){
         	throw new MethodFailureException("insert failed")
         }
         this.empty = false;    
