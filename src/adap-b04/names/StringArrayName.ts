@@ -36,7 +36,7 @@ export class StringArrayName extends AbstractName {
         }
         let comp = this.components[i];
         if (comp == null || comp == undefined){
-        	thhrow new InvalidStateException("Component must not be null or undefined");
+        	throw new InvalidStateException("Component must not be null or undefined");
         }
         return comp;	   
     }
@@ -68,7 +68,7 @@ export class StringArrayName extends AbstractName {
         }
         this.components.splice(i, 0, c);
         if (this.components[i] == null || this.components[i] == undefined 
-        || this.components[i] !=== c || this.getNoComponents !== length + 1){
+        || this.components[i] !== c || this.getNoComponents() !== length + 1){
         	throw new MethodFailureException("insert failed");
         }
     }

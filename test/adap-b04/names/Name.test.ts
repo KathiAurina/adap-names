@@ -123,7 +123,7 @@ describe("StringName Tests", () => {
 	it("constructor with valid expressions", () => {
 		expect(n.getNoComponents()).toBe(3);
 		expect(n.asDataString()).toBe("oss.fau.de");
-		expect(n.empty).toBe(false);
+		expect(n.isEmpty()).toBe(false);
 	});
 	
 	it("clone", () => {
@@ -187,6 +187,7 @@ describe("StringName Tests", () => {
 		expect(n.asDataString()).toBe("oss");
 		n.remove(0);
 		expect(n.asDataString()).toBe("");
+		expect(n.isEmpty()).toBe(true);
 	});
 
 	it("append with valid expressions", () => {
@@ -233,7 +234,7 @@ describe("Shared Methods from AbstractName Tests", () => {
 		const hashA = n1.getHashCode();
 		const hashB = n1.getHashCode();
 
-        expect(hashA.toBe(hashB); 
+        expect(hashA).toBe(hashB); 
 		expect(n2.getHashCode()).toBe(n1.getHashCode());        
     });
     
