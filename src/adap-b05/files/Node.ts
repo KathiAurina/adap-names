@@ -12,7 +12,7 @@ export class Node {
 
     constructor(bn: string, pn: Directory) {
         this.doSetBaseName(bn);
-        this.parentNode = pn; // why oh why do I have to set this
+        this.parentNode = pn;
         this.initialize(pn);
     }
 
