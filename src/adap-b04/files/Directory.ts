@@ -1,4 +1,5 @@
 import { Node } from "./Node";
+import {IllegalArgumentException} from "../common/IllegalArgumentException";
 
 export class Directory extends Node {
 

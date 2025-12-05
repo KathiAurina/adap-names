@@ -6,7 +6,7 @@ import { StringArrayName } from "../../../src/adap-b04/names/StringArrayName";
 
 import { IllegalArgumentException } from "../../../src/adap-b04/common/IllegalArgumentException";
 import { InvalidStateException } from "../../../src/adap-b04/common/InvalidStateException";
-import { MethodFailureException } from "../../../src/adap-b04/common/MethodFailedException";
+import { MethodFailedException } from "../../../src/adap-b04/common/MethodFailedException";
 
 
 describe("StringArrayName Tests", () => {
@@ -29,7 +29,7 @@ describe("StringArrayName Tests", () => {
 	});
 	
 	it("clone", () => {
-		let clone = n.clone();
+		let clone = n.clone() as Name;
 		expect(clone.getNoComponents()).toBe(3);
 		expect(clone.asString(".")).toBe("oss.fau.de");
 		expect(clone).not.toBe(n);
@@ -123,7 +123,7 @@ describe("StringName Tests", () => {
 	});
 	
 	it("clone", () => {
-		let clone = n.clone();
+		let clone = n.clone() as Name;
 		expect(clone.getNoComponents()).toBe(3);
 		expect(clone.asDataString()).toBe("oss.fau.de");
 		expect(clone).not.toBe(n);

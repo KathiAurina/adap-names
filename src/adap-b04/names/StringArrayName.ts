@@ -23,9 +23,6 @@ export class StringArrayName extends AbstractName {
         });
     }
 
-    public clone(): Name {
-        return Object.create(this);
-    }
 
     public asString(delimiter: string = this.delimiter): string {
 		if (delimiter == null || delimiter.length != 1){
