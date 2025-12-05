@@ -1,5 +1,6 @@
 import { IllegalArgumentException } from "../common/IllegalArgumentException";
 import { InvalidStateException } from "../common/InvalidStateException";
+import { ServiceFailureException } from "../common/ServiceFailureException";
 
 import { Name } from "../names/Name";
 import { Directory } from "./Directory";
@@ -33,6 +34,10 @@ export class Node {
     }
 
     public getBaseName(): string {
+        const bn = this.doGetBaseName();
+        if (bn == null || bn == "" || bn == undefined) {
+            throw new InvalidStateException("Base name must not be empty, null or undefined");
+        }
         return this.doGetBaseName();
     }
 
@@ -57,7 +62,14 @@ export class Node {
      * @param bn basename of node being searched for
      */
     public findNodes(bn: string): Set<Node> {
-        throw new Error("needs implementation or deletion");
+        try {
+            if (this.getBaseName() == bn){
+                return new Set<Node>().add(this);
+            }
+            return new Set<Node>();
+        } catch (e) {
+            throw new ServiceFailureException("Component failure during search in Node");
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 import { Name } from "../names/Name";
 import { Directory } from "./Directory";
+import {IllegalArgumentException} from "../common/IllegalArgumentException";
 
 export class Node {
 
@@ -37,7 +38,7 @@ export class Node {
     }
 
     protected doGetBaseName(): string {
-	    if (bn == null || bn === "") {
+	    if (this.baseName == null || this.baseName == "") {
 	        throw new IllegalArgumentException("Base name must not be empty or null");
 	    }
 	    return this.baseName;
